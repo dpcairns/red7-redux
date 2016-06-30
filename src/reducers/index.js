@@ -1,21 +1,80 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
+import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE, colorArray } from '../constants/ActionTypes';
+import shortid from 'shortid'
 
-/**
- * combineReducers is important to understand. As your app might grow in size
- * and complexity, you will likely begin to split your reducers into separate
- * functions - with each one managing a separate slice of the state! This helper
- * function from 'redux' simply merges the reducers. Keep in mind we are using
- * the ES6 shorthand for property notation.
- *
- * If you're transitioning from Flux, you will notice we only use one store, but
- * instead of relying on multiple stores to manage diff parts of the state, we use
- * various reducers and combine them.
- *
- * More info: http://rackt.org/redux/docs/api/combineReducers.html
- */
+let fullDeck = []
+  for(let i=1; i<8; i++){
+    for(let j=0; j<colorArray.length; j++){
+      fullDeck.push( { cardNumber: i, cardColor: colorArray[j], _id: shortid.generate() } )
+    }
+  }
+
+    function deckNow(state = [], action) {
+      switch (action.type) {
+      case CLEAR_HAND:
+          let array = fullDeck
+          let i = 0
+          , j = 0
+          , temp = null
+          for (i = array.length - 1; i > 0; i -= 1) {
+            j = Math.floor(Math.random() * (i + 1))
+            temp = array[i]
+            array[i] = array[j]
+            array[j] = temp
+            }
+            return array
+      case DRAW_ONE:
+        myHand(action.currentHand, action)
+        return state.slice(1, state.length + 1);
+      default:
+        return state;
+      }
+    }
+
+function myHand(state = [], action) {
+  switch (action.type) {
+  case MELD_ONE:
+    let selectedCard = state.find( (card) => {
+      return card._id === action.selectedCard._id
+    })
+    return [...state.slice(0, state.indexOf(selectedCard)),
+            ...state.slice(state.indexOf(selectedCard) + 1, (state.length))
+            ];
+  case DRAW_ONE:
+    return [...state, action.topDeck];
+  case CLEAR_HAND:
+    return [];
+  default:
+    return state;
+  }
+}
+
+
+function myTableau(state = [], action) {
+  switch (action.type) {
+  case MELD_ONE:
+    return [...state, action.selectedCard];
+  case CLEAR_HAND:
+    return [];
+  default:
+    return state;
+  }
+}
+
+
+function playing(state = false, action) {
+  switch (action.type) {
+  case TOGGLE_PLAYING:
+    return !state;
+  default:
+    return state;
+  }
+}
+
+
 const rootReducer = combineReducers({
-  counter, // you might be used to: counter: counter,
+  deckNow, myHand, myTableau, playing
 });
 
 export default rootReducer;

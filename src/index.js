@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
  * the main SCSS file we have in the styles directory.
  */
 import './styles/main.scss';
-
+import rootReducer from './reducers/index.js'
 /**
  * Both configureStore and Root are required conditionally.
  * See configureStore.js and Root.js for more details.
@@ -13,7 +13,13 @@ import './styles/main.scss';
 import { configureStore } from './store/configureStore';
 import { Root } from './containers/Root';
 
-const store = configureStore();
+const initialState = {
+  deckNow: [],
+  myHand: [],
+  myTableau: [],
+  playing: false
+}
+const store = configureStore(rootReducer, initialState);
 
 ReactDOM.render(
   <Root store={store} />,
