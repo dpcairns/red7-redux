@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
-import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE, colorArray } from '../constants/ActionTypes';
+import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE, TOGGLE_NEW_GAME, CANVAS_ONE, colorArray } from '../constants/ActionTypes';
 import shortid from 'shortid'
 
 let fullDeck = []
@@ -35,11 +35,18 @@ let fullDeck = []
 function myHand(state = [], action) {
   switch (action.type) {
   case MELD_ONE:
-    let selectedCard = state.find( (card) => {
+    let tableauCard = state.find( (card) => {
       return card._id === action.selectedCard._id
     })
-    return [...state.slice(0, state.indexOf(selectedCard)),
-            ...state.slice(state.indexOf(selectedCard) + 1, (state.length))
+    return [...state.slice(0, state.indexOf(tableauCard)),
+            ...state.slice(state.indexOf(tableauCard) + 1, (state.length))
+            ];
+  case CANVAS_ONE:
+    let canvasCard = state.find( (card) => {
+      return card._id === action.selectedCard._id
+    })
+    return [...state.slice(0, state.indexOf(canvasCard)),
+            ...state.slice(state.indexOf(canvasCard) + 1, (state.length))
             ];
   case DRAW_ONE:
     return [...state, action.topDeck];
@@ -63,6 +70,19 @@ function myTableau(state = [], action) {
 }
 
 
+function canvasNow(state = [], action) {
+  switch (action.type) {
+  case CANVAS_ONE:
+    return [...state, action.selectedCard];
+  case CLEAR_HAND:
+    return [];
+  default:
+    return state;
+  }
+}
+
+
+
 function playing(state = false, action) {
   switch (action.type) {
   case TOGGLE_PLAYING:
@@ -73,8 +93,17 @@ function playing(state = false, action) {
 }
 
 
+function newGame(state = false, action) {
+  switch (action.type) {
+  case TOGGLE_NEW_GAME:
+    return !state;
+  default:
+    return state;
+  }
+}
+
 const rootReducer = combineReducers({
-  deckNow, myHand, myTableau, playing
+  deckNow, myHand, myTableau, playing, newGame, canvasNow
 });
 
 export default rootReducer;

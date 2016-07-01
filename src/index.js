@@ -17,8 +17,11 @@ const initialState = {
   deckNow: [],
   myHand: [],
   myTableau: [],
-  playing: false
+  canvasNow: [],
+  playing: false,
+  newGame: false,
 }
+
 const store = configureStore(rootReducer, initialState);
 
 ReactDOM.render(

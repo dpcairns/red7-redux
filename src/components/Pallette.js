@@ -1,22 +1,32 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Card from './Card'
 
 export default class Pallette extends Component {
   render() {
-    let { palletteList } = this.props
-    let palletteNodes = palletteList.map( (card,i) => {
-      return (<div key={Date.now() + i}>
-        <Card cardColor={card.cardColor} cardNumber={card.cardNumber}/>
-       </div>)
+    let { myTableau } = this.props
+    let tableauNodes = []
+    if(myTableau.length > 0){
+      tableauNodes = myTableau.map( (card,i) => {
+      return (
+        <div key={card._id}>
+        <Card card={card}/>
+       </div>
+     )
     })
+  }
+
     return (
-    <div>
-      {palletteNodes}
-    </div>
+      <div>
+          <h2>Your tableau has {myTableau.length} cards</h2>
+            <div  style={{display:"flex", flexFlow: "row wrap"}}>
+                  {tableauNodes}
+            </div>
+
+      </div>
     );
   }
 }
 
-Canvas.propTypes = {
-  palletteList: PropTypes.array.isRequired,
+Pallette.propTypes = {
+  myTableau: PropTypes.array.isRequired,
 }
