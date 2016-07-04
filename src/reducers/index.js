@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
-import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE, TOGGLE_NEW_GAME, CANVAS_ONE, colorArray } from '../constants/ActionTypes';
+import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE,
+  YOU_MELD_ONE, YOU_DRAW_ONE, CHANGE_RULES,
+  YOU_CANVAS_ONE, TOGGLE_NEW_GAME, CANVAS_ONE, colorArray } from '../constants/ActionTypes';
 import shortid from 'shortid'
 
 let fullDeck = []
@@ -27,6 +29,10 @@ let fullDeck = []
       case DRAW_ONE:
         myHand(action.currentHand, action)
         return state.slice(1, state.length + 1);
+      case YOU_DRAW_ONE:
+          yourHand(action.currentHand, action)
+          return state.slice(1, state.length + 1);
+
       default:
         return state;
       }
@@ -70,9 +76,35 @@ function myTableau(state = [], action) {
 }
 
 
-function canvasNow(state = [], action) {
+function yourHand(state = [], action) {
   switch (action.type) {
-  case CANVAS_ONE:
+  case YOU_MELD_ONE:
+    let yourTableauCard = state.find( (card) => {
+      return card._id === action.selectedCard._id
+    })
+    return [...state.slice(0, state.indexOf(yourTableauCard)),
+            ...state.slice(state.indexOf(yourTableauCard) + 1, (state.length))
+            ];
+  case YOU_CANVAS_ONE:
+    let yourCanvasCard = state.find( (card) => {
+      return card._id === action.selectedCard._id
+    })
+    return [...state.slice(0, state.indexOf(yourCanvasCard)),
+            ...state.slice(state.indexOf(yourCanvasCard) + 1, (state.length))
+            ];
+  case YOU_DRAW_ONE:
+    return [...state, action.topDeck];
+  case CLEAR_HAND:
+    return [];
+  default:
+    return state;
+  }
+}
+
+
+function yourTableau(state = [], action) {
+  switch (action.type) {
+  case YOU_MELD_ONE:
     return [...state, action.selectedCard];
   case CLEAR_HAND:
     return [];
@@ -83,10 +115,25 @@ function canvasNow(state = [], action) {
 
 
 
-function playing(state = false, action) {
+function canvasNow(state = [], action) {
   switch (action.type) {
-  case TOGGLE_PLAYING:
-    return !state;
+  case CANVAS_ONE:
+    return [...state, action.selectedCard];
+  case YOU_CANVAS_ONE:
+      return [...state, action.selectedCard];
+  case CLEAR_HAND:
+    return [];
+  default:
+    return state;
+  }
+}
+
+
+
+function playing(state = "", action) {
+  switch (action.type) {
+  case CHANGE_RULES:
+    return action.newRules;
   default:
     return state;
   }
@@ -103,7 +150,7 @@ function newGame(state = false, action) {
 }
 
 const rootReducer = combineReducers({
-  deckNow, myHand, myTableau, playing, newGame, canvasNow
+  deckNow, myHand, myTableau, playing, newGame, canvasNow, yourHand, yourTableau
 });
 
 export default rootReducer;

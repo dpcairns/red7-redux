@@ -11,14 +11,14 @@ export default class Hand extends Component {
       return (
       <div key={card._id}>
         <Card card={card}/>
-        <button onClick={toCanvas.bind(this, myHand, deckNow, card)}>Send to canvas</button>
+        <button onClick={toCanvas.bind(this, myHand, deckNow, card)}>canvas</button>
         <br/>
-        <button onClick={meldOne.bind(this, myHand, deckNow, card)}>Send to tableau</button>
+        <button onClick={meldOne.bind(this, myHand, deckNow, card)}>tableau</button>
        </div>
      )
     })
   }
-
+console.table(myHand)
     return (
       <div>
       <h2>Your hand has {myHand.length} cards</h2>

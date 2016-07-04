@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Card from './Card'
 export default class Canvas extends Component {
   render() {
-    let { canvasNow } = this.props
+    let { canvasNow, changeRules, playing } = this.props
     let canvasNodes = []
     if(canvasNow.length > 0){
       canvasNodes = canvasNow.map( (card,i) => {
@@ -14,31 +14,41 @@ export default class Canvas extends Component {
     })
   }
 
-    let currentRule = "highest card wins"
     if(canvasNow.length > 0){
-          switch(canvasNow[canvasNow.length - 1]['cardColor']) {
+          switch(canvasNow[canvasNow.length - 1].cardColor) {
           case 'red':
-             currentRule = "highest card wins"
+             changeRules("highest card wins")
+             break
           case 'orange':
-             currentRule = "most of one number wins"
+             changeRules("most of one number wins")
+             break
           case 'yellow':
-             currentRule = "most of one color wins"
+             changeRules("most of one color wins")
+             break
           case 'green':
-              currentRule = "most even cards wins"
+              changeRules("most even cards wins")
+              break
           case 'blue':
-              currentRule = "most different colors wins"
+              changeRules("most different colors wins")
+              break
           case 'indigo':
-               currentRule = "longest run (cards in sequence) wins"
+               changeRules("longest run (cards in sequence) wins")
+               break
+
           case 'violet':
-               currentRule = "most cards below 4 wins"
+               changeRules("most cards below 4 wins")
+               break
+
           default:
-                currentRule = "highest card wins"
+                changeRules("highest card wins")
+                break
+
             }
         }
     return (
       <div>
-          <h2>The current rule is: {currentRule}</h2>
-            <div>
+          <h2>The current rule is: {playing}</h2>
+            <div style={{display: "flex", justifyContent: "center"}}>
                   {canvasNodes[canvasNodes.length - 1]}
 
             </div>

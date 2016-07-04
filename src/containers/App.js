@@ -7,12 +7,14 @@ import Hand from '../components/Hand';
 
 export default class App extends Component {
   render() {
-    let {deckNow, myHand, newGame, playing, actions, myTableau, canvasNow} = this.props
+    let {deckNow, myHand, newGame, yourTableau, yourHand, playing, actions, myTableau, canvasNow} = this.props
     return (
       <div className="main-app-container">
         <div className="main-app-nav">Red 7</div>
         <Deck clearHand={actions.clearHand} playing={playing} myHand={myHand}
-        shuffleDeck={actions.shuffleDeck} meldOne={actions.meldOne} drawOne={actions.drawOne}
+        shuffleDeck={actions.shuffleDeck} changeRules={actions.changeRules} youMeldOne={actions.youMeldOne} youDrawOne={actions.youDrawOne}
+        youToCanvas={actions.youToCanvas} yourHand={yourHand} yourTableau={yourTableau}
+        meldOne={actions.meldOne} drawOne={actions.drawOne}
         togglePlaying={actions.togglePlaying} deckNow={deckNow} canvasNow={canvasNow}
         myTableau={myTableau} toggleNewGame={actions.toggleNewGame} toCanvas={actions.toCanvas} newGame={newGame}/>
       </div>
@@ -33,7 +35,9 @@ function mapStateToProps(state) {
     myTableau: state.myTableau,
     playing: state.playing,
     newGame: state.newGame,
-    canvasNow: state.canvasNow
+    canvasNow: state.canvasNow,
+    yourHand: state.yourHand,
+    yourTableau: state.yourTableau
   };
 }
 

@@ -10,26 +10,29 @@ export default class Deck extends Component {
     }
 
   render() {
-    let { deckNow, meldOne, myHand, newGame, canvasNow, toCanvas,
-      toggleNewGame, myTableau, clearHand, drawOne,
-      colorArray, togglePlaying, playing } = this.props
+    let { deckNow, meldOne, myHand, newGame, canvasNow, toCanvas, youMeldOne, youDrawOne, youToCanvas,
+      toggleNewGame, myTableau, clearHand, drawOne, yourHand, yourTableau, changeRules,
+      colorArray, togglePlaying, playing, setup } = this.props
 
-      if(deckNow.length > 0 && myHand.length <= 5){
-        if(newGame === true){
-        drawOne(myHand, deckNow)
-        }
-        if(myHand.length >= 5){
-          toggleNewGame()
-        }
-      }
+      if(newGame===true){
+
+            if(deckNow.length > 0){
+                    if(myHand.length <= 5){
+                    drawOne(myHand, deckNow)
+                    }
+                    else if(myHand.length >= 5 && yourHand.length <= 5){
+                    youDrawOne(yourHand, deckNow)
+                    } else {
+                    toggleNewGame()
+                    }
+                  }
+              }
+
     return (
 
       <div style={{textAlign: "center"}}>
-                <button onClick={toggleNewGame.bind(this)}>
-                  {/*myHand.length === 0 ? "New game" : "End game"*/} new game
-                </button>
-              <button onClick={clearHand.bind(this)}>
-                {/*myHand.length === 0 ? "New game" : "End game"*/} clear hand
+              <button onClick={ () => {clearHand(); toggleNewGame()} }>
+              new game
               </button>
             <button onClick={deckNow.length > 0 ? drawOne.bind(this, myHand, deckNow) : clearHand.bind(this)}>
                 Draw a card
@@ -37,12 +40,23 @@ export default class Deck extends Component {
           <hr/>
             <h3>(the deck has {deckNow.length} cards.)</h3>
           <hr/>
-            <Canvas canvasNow={canvasNow}/>
+            <Canvas playing={playing} changeRules={changeRules} canvasNow={canvasNow}/>
           <hr/>
-            <Hand meldOne={meldOne} toCanvas={toCanvas} deckNow={deckNow} myHand={myHand} drawOne={drawOne} />
-          <hr/>
-            <Pallette myTableau={myTableau} />
-        </div>
+
+          <div style={{width:"45%", float: "left", border: "1px solid black", margin: "10px"}}>
+                ME
+                    <Hand meldOne={meldOne} toCanvas={toCanvas} deckNow={deckNow} myHand={myHand} drawOne={drawOne} />
+                    <hr/>
+                    <Pallette myTableau={myTableau} />
+            </div>
+
+            <div style={{width:"45%", float: "left", border: "1px solid black", margin: "10px"}}>
+            YOU
+                      <Hand meldOne={youMeldOne} toCanvas={youToCanvas} deckNow={deckNow} myHand={yourHand} drawOne={youDrawOne} />
+                      <hr/>
+                      <Pallette myTableau={yourTableau} />
+              </div>
+            </div>
     )
   }
 }

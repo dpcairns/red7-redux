@@ -17,8 +17,11 @@ const initialState = {
   deckNow: [],
   myHand: [],
   myTableau: [],
+  yourHand: [],
+  yourTableau: [],
   canvasNow: [],
-  playing: false,
+  playing: "highest card wins",
+  setup: false,
   newGame: false,
 }
 
