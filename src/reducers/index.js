@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
 import { SHUFFLE, DRAW_ONE, TOGGLE_PLAYING, CLEAR_HAND, MELD_ONE,
-  YOU_MELD_ONE, YOU_DRAW_ONE, CHANGE_RULES,
+  YOU_MELD_ONE, YOU_DRAW_ONE, CHANGE_RULES, NEW_TURN, I_AM_WINNING, I_AM_LOSING, YOU_ARE_LOSING, YOU_ARE_WINNING,
   YOU_CANVAS_ONE, TOGGLE_NEW_GAME, CANVAS_ONE, colorArray } from '../constants/ActionTypes';
 import shortid from 'shortid'
 
@@ -33,6 +33,15 @@ let fullDeck = []
           yourHand(action.currentHand, action)
           return state.slice(1, state.length + 1);
 
+      default:
+        return state;
+      }
+    }
+
+    function newGame(state = false, action) {
+      switch (action.type) {
+      case TOGGLE_NEW_GAME:
+        return !state;
       default:
         return state;
       }
@@ -70,6 +79,35 @@ function myTableau(state = [], action) {
     return [...state, action.selectedCard];
   case CLEAR_HAND:
     return [];
+  default:
+    return state;
+  }
+}
+
+
+function myStatus(state = {turn: false, winning: false}, action) {
+  switch (action.type) {
+  case TOGGLE_NEW_GAME:
+    return {turn: true, winning: false}
+  case NEW_TURN:
+    return Object.assign( {}, state, {turn: !state.turn} );
+  case I_AM_WINNING:
+    return {turn: state.turn, winning: true};
+  case I_AM_LOSING:
+    return {turn: state.turn, winning: false};
+  default:
+    return state;
+  }
+}
+
+function yourStatus(state = {turn: false, winning: false}, action) {
+  switch (action.type) {
+  case NEW_TURN:
+    return Object.assign( {}, state, {turn: !state.turn} );
+  case YOU_ARE_WINNING:
+    return {turn: state.turn, winning: true};
+  case YOU_ARE_LOSING:
+    return {turn: state.turn, winning: false};
   default:
     return state;
   }
@@ -130,7 +168,7 @@ function canvasNow(state = [], action) {
 
 
 
-function playing(state = "", action) {
+function playing(state = "highest card wins", action) {
   switch (action.type) {
   case CHANGE_RULES:
     return action.newRules;
@@ -140,17 +178,10 @@ function playing(state = "", action) {
 }
 
 
-function newGame(state = false, action) {
-  switch (action.type) {
-  case TOGGLE_NEW_GAME:
-    return !state;
-  default:
-    return state;
-  }
-}
+
 
 const rootReducer = combineReducers({
-  deckNow, myHand, myTableau, playing, newGame, canvasNow, yourHand, yourTableau
+  deckNow, myHand, myTableau, playing, newGame, canvasNow, yourHand, yourTableau, myStatus, yourStatus
 });
 
 export default rootReducer;

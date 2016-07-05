@@ -3,8 +3,12 @@
  * within your app. Combined with the DevTools/logger, you can see how state and subsequently
  * your UI is being affected.
  */
-
  export const TOGGLE_NEW_GAME = 'TOGGLE_NEW_GAME';
+ export const I_AM_WINNING = 'I_AM_WINNING';
+ export const YOU_ARE_WINNING = 'YOU_ARE_WINNING';
+ export const I_AM_LOSING = 'I_AM_LOSING';
+ export const YOU_ARE_LOSING = 'YOU_ARE_LOSING';
+ export const NEW_TURN = 'NEW_TURN';
  export const CHANGE_RULES = 'CHANGE_RULES';
 export const SHUFFLE = 'SHUFFLE';
 export const CLEAR_HAND = 'CLEAR_HAND';

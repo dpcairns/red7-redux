@@ -1,5 +1,8 @@
-import { DRAW_ONE, SHUFFLE, TOGGLE_PLAYING, YOU_MELD_ONE, YOU_DRAW_ONE,
-  YOU_CANVAS_ONE, CLEAR_HAND, MELD_ONE, TOGGLE_NEW_GAME, CANVAS_ONE, CHANGE_RULES, TOGGLE_SETUP } from '../constants/ActionTypes';
+import { DRAW_ONE, SHUFFLE, TOGGLE_PLAYING, YOU_MELD_ONE,
+  YOU_DRAW_ONE, NEW_TURN,
+   I_AM_LOSING, I_AM_WINNING, YOU_ARE_LOSING, YOU_ARE_WINNING,
+  YOU_CANVAS_ONE, CLEAR_HAND, MELD_ONE, TOGGLE_NEW_GAME, CANVAS_ONE,
+  CHANGE_RULES, TOGGLE_SETUP } from '../constants/ActionTypes';
 
 export function drawOne(_currentHand, _currentDeck) {
   return {
@@ -79,6 +82,40 @@ export function clearHand(){
     type: CLEAR_HAND
   }
 }
+
+
+export function iAmWinning(){
+  return {
+    type: I_AM_WINNING
+  }
+}
+
+
+export function iAmLosing(){
+  return {
+    type: I_AM_LOSING
+  }
+}
+
+export function youAreWinning(){
+  return {
+    type: YOU_ARE_WINNING
+  }
+}
+
+export function youAreLosing(){
+  return {
+    type: YOU_ARE_LOSING
+  }
+}
+
+
+export function newTurn(){
+  return {
+    type: NEW_TURN
+  }
+}
+
 
 export function shuffleDeck(shuffledDeck) {
   return {

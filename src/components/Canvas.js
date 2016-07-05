@@ -34,7 +34,6 @@ export default class Canvas extends Component {
           case 'indigo':
                changeRules("longest run (cards in sequence) wins")
                break
-
           case 'violet':
                changeRules("most cards below 4 wins")
                break

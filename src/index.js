@@ -20,6 +20,8 @@ const initialState = {
   yourHand: [],
   yourTableau: [],
   canvasNow: [],
+  myStatus: {turn: false, winning: false},
+  yourStatus: {turn: false, winning: false},
   playing: "highest card wins",
   setup: false,
   newGame: false,
