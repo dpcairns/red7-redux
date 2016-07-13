@@ -8,7 +8,8 @@ import shortid from 'shortid'
 let fullDeck = []
   for(let i=1; i<8; i++){
     for(let j=0; j<colorArray.length; j++){
-      fullDeck.push( { cardNumber: i, cardColor: colorArray[j], _id: shortid.generate() } )
+      fullDeck.push( { cardNumber: i, cardColor: colorArray[j], _id: shortid.generate(),
+        isEven: (i %2 === 0), isBelowFour: (i < 4) } )
     }
   }
 
