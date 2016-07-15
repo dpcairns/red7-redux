@@ -173,60 +173,57 @@ export default class Deck extends Component {
                         }
                 break
                 case "longest run (cards in sequence) wins":
-                  let myLongestRun = 1;
+                  let myLongestRun = 0;
                   let yourLongestRun = 0
                   let mySingletons = []
                   let yourSingletons = []
                   let myCurrentStreak = 0
                   let yourCurrentStreak = 0
-                  this.props.myTableau.forEach( (card, i) => {
-                    if(mySingletons.indexOf(card.cardNumber < 0)){
-                      mySingletons.push(card.cardNumber)
-                    }
+
+                  if (this.props.myTableau.length === 1) {myLongestRun = .9 }
+                  if (this.props.yourTableau.length === 1) {yourLongestRun = .9 }
+
+                  mySingletons = this.props.myTableau.map( card => {
+                    return card.cardNumber
                   })
-
-
-                  mySingletons = mySingletons.filter(function(elem, pos,arr) {
-                              return arr.indexOf(elem) == pos;
-                            });
-
-                  mySingletons.sort(function(a, b){return a-b});
-
-                  mySingletons.forEach( (d, i) => {
-                    if (d != mySingletons[i - 1] + 1){
-                      if(myCurrentStreak > myLongestRun){
-                        myLongestRun = myCurrentStreak
-                      }
-                      myCurrentStreak = 0
-                    }
-                    myCurrentStreak++
-                  })
-
-
+                  mySingletons = mySingletons.sort(function(a, b){return a.cardNumber-b.cardNumber});
                   console.table(mySingletons)
-                  this.props.yourTableau.forEach( (card, i) => {
-                    if(yourSingletons.indexOf(card.cardNumber < 0)){
-                      yourSingletons.push(card.cardNumber)
+                  mySingletons.forEach( (card, i) => {
+                    if(i<mySingletons.length){
+
+                    if (mySingletons[i + 1] - card === 1 || mySingletons.length===1){
+                      myCurrentStreak++
+                    } else if(myCurrentStreak > myLongestRun){
+                      myLongestRun = myCurrentStreak
+                      myCurrentStreak = 0} else{
+                        myCurrentStreak = 0
                       }
-                          })
+                  }
 
-                yourSingletons = yourSingletons.filter(function(elem, pos,arr) {
-                            return arr.indexOf(elem) == pos;
-                          });
+                  })
 
 
-                  yourSingletons.sort(function(a, b){return a-b});
+                      /*yourSingletons = this.props.yourTableau.filter(function(card, index, arr) {
+                                  return arr.indexOf(card) === index;
+                                });*/
 
-                  console.table(yourSingletons)
-                        yourSingletons.forEach( (d, i) => {
-                          if (d != yourSingletons[i - 1] + 1){
-                            if(yourCurrentStreak > yourLongestRun){
-                              yourLongestRun = yourCurrentStreak
-                            }
-                            yourCurrentStreak = 0
-                          }
-                          yourCurrentStreak++
-                        })
+                                yourSingletons = this.props.yourTableau.map( card => {
+                                  return card.cardNumber
+                                })
+                                yourSingletons = yourSingletons.sort(function(a, b){return a.cardNumber-b.cardNumber});
+                                yourSingletons.forEach( (card, i) => {
+                                  if(i<yourSingletons.length){
+
+                                  if (yourSingletons[i + 1] - card === 1){
+                                    yourCurrentStreak++
+                                  } else if(yourCurrentStreak > yourLongestRun){
+                                    yourLongestRun = yourCurrentStreak
+                                    yourCurrentStreak = 0} else{
+                                      myCurrentStreak = 0
+
+                                }
+                              }
+                                })
 
 
                 if (myLongestRun > yourLongestRun){
@@ -293,7 +290,6 @@ export default class Deck extends Component {
                       <hr/>
                       {yourStatus.winning ? "you are winning the game" : "you are losing the game"}
                       <button style={{display: yourStatus.turn ? 'block' : 'none'}} onClick={newTurn.bind(this)}> pass turn </button>
-
                       <Pallette myTableau={yourTableau} />
               </div>
             </div>
