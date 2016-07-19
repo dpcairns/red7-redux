@@ -205,6 +205,15 @@ export default class Deck extends Component {
 
                       /*yourSingletons = this.props.yourTableau.filter(function(card, index, arr) {
                                   return arr.indexOf(card) === index;
+
+                                  arr.filter( (card, index, arr){
+                                  return arr.indexOf(card) === index
+
+                                  counts = {}
+                                  arr.forEach( item => {
+                                  counts[item] = (counts[item] || 0) + 1
+                                })
+                                })
                                 });*/
 
                                 yourSingletons = this.props.yourTableau.map( card => {
@@ -286,7 +295,7 @@ export default class Deck extends Component {
 
             <div style={{width:"45%", float: "left", background: yourStatus.turn ? 'lightgreen' : '', border: "1px solid black", margin: "10px"}}>
             YOU
-                      <Hand meldOne={youMeldOne} checkWinning={this.checkWinning.bind(this)} yourStatus={yourStatus} toCanvas={youToCanvas} deckNow={deckNow} myHand={yourHand} drawOne={youDrawOne} />
+                      <Hand meldOne={youMeldOne} checkWinning={this.checkWinning.bind(this)} myStatus={yourStatus} toCanvas={youToCanvas} deckNow={deckNow} myHand={yourHand} drawOne={youDrawOne} />
                       <hr/>
                       {yourStatus.winning ? "you are winning the game" : "you are losing the game"}
                       <button style={{display: yourStatus.turn ? 'block' : 'none'}} onClick={newTurn.bind(this)}> pass turn </button>

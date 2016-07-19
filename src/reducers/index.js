@@ -86,29 +86,43 @@ function myTableau(state = [], action) {
 }
 
 
-function myStatus(state = {turn: false, winning: false}, action) {
+function myStatus(state = {turn: false, winning: false, alreadyMelded: false}, action) {
   switch (action.type) {
   case TOGGLE_NEW_GAME:
-    return {turn: true, winning: false}
+    return {turn: true, winning: false, alreadyMelded: false}
   case NEW_TURN:
     return Object.assign( {}, state, {turn: !state.turn} );
+  case MELD_ONE:
+    return {turn: state.turn, winning: state.winning, alreadyMelded: true};
+  case CANVAS_ONE:
+    return {turn: false, winning: state.winning, alreadyMelded: false};
+  case YOU_CANVAS_ONE:
+    return {turn: true, winning: state.winning, alreadyMelded: state.alreadyMelded};
   case I_AM_WINNING:
-    return {turn: state.turn, winning: true};
+    return {turn: state.turn, winning: true, alreadyMelded: state.alreadyMelded};
   case I_AM_LOSING:
-    return {turn: state.turn, winning: false};
+    return {turn: state.turn, winning: false, alreadyMelded: state.alreadyMelded};
   default:
     return state;
   }
 }
 
-function yourStatus(state = {turn: false, winning: false}, action) {
+function yourStatus(state = {turn: false, winning: false, alreadyMelded: false}, action) {
   switch (action.type) {
+  case TOGGLE_NEW_GAME:
+   return {turn: false, winning: false, alreadyMelded: false}
   case NEW_TURN:
     return Object.assign( {}, state, {turn: !state.turn} );
+  case CANVAS_ONE:
+    return {turn: true, winning: state.winning, alreadyMelded: false};
+  case YOU_MELD_ONE:
+    return {turn: state.turn, winning: state.winning, alreadyMelded: true};
+  case YOU_CANVAS_ONE:
+    return {turn: false, winning: state.winning, alreadyMelded: state.alreadyMelded};
   case YOU_ARE_WINNING:
-    return {turn: state.turn, winning: true};
+    return {turn: state.turn, winning: true, alreadyMelded: state.alreadyMelded};
   case YOU_ARE_LOSING:
-    return {turn: state.turn, winning: false};
+    return {turn: state.turn, winning: false, alreadyMelded: state.alreadyMelded};
   default:
     return state;
   }

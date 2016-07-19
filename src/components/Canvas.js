@@ -37,7 +37,6 @@ export default class Canvas extends Component {
           case 'violet':
                changeRules("most cards below 4 wins")
                break
-
           default:
                 changeRules("highest card wins")
                 break

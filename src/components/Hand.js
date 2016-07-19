@@ -3,7 +3,7 @@ import Card from './Card'
 
 export default class Hand extends Component {
   render() {
-    let { myHand, drawOne, deckNow, meldOne, toCanvas, checkWinning } = this.props
+    let { myHand, drawOne, deckNow, meldOne, toCanvas, checkWinning, myStatus } = this.props
 
     let handNodes = []
     if(myHand.length > 0){
@@ -11,9 +11,9 @@ export default class Hand extends Component {
       return (
       <div key={card._id}>
         <Card card={card}/>
-        <button onClick={ () => { toCanvas(myHand, deckNow, card)} }>canvas</button>
+        {myStatus.turn ? <button onClick={ () => { toCanvas(myHand, deckNow, card) } }>canvas</button> : ""}
         <br/>
-        <button onClick={ () => { meldOne(myHand, deckNow, card) } }>tableau</button>
+        {myStatus.turn && myStatus.alreadyMelded===false ? <button onClick={ () => { meldOne(myHand, deckNow, card) } }>tableau</button> : ""}
        </div>
      )
     })
